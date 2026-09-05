@@ -1,69 +1,83 @@
-create table clientes(
-id_cliente int not null auto_increment,
-nome varchar(50) not null,
-email varchar(60),
-cidade varchar(30) default 'São Paulo' not null,
-estado varchar(30) default 'SP' not null,
-data_cadastro date,
-primary key(id_cliente)
-); 
+CREATE TABLE clientes(
+id_cliente INT NOT NULL auto_increment,
+nome VARCHAR(50) NOT NULL,
+email VARCHAR(60) UNIQUE,
+cidade VARCHAR(30) DEFAULT 'São Paulo' NOT NULL,
+estado VARCHAR(30) DEFAULT 'SP' NOT NULL,
+data_cadastro DATE,
+PRIMARY KEY(id_cliente)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-create table categorias(
-id_categoria int not null auto_increment,
-nome_categoria varchar(50),
-primary key(id_categoria)
-);
+CREATE TABLE categorias(
+id_categoria INT NOT NULL auto_increment,
+nome_categoria VARCHAR(50),
+PRIMARY KEY(id_categoria)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-create table produtos(
-id_produto int not null,
-id_categoria int not null,
-nome_produto varchar(50),
-preco decimal,
-custo decimal, 
-estoque int,	
-primary key(id_produto)
-);
+CREATE TABLE produtos(
+id_produto INT NOT NULL,
+id_categoria INT NOT NULL,
+nome_produto VARCHAR(50),
+preco DECIMAL(10,2),
+custo DECIMAL(10,2), 
+estoque INT,	
+PRIMARY KEY(id_produto)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-create table pedidos(
-id_pedido int not null auto_increment,
-id_cliente int not null, 
-data_pedido date, 
-status varchar(20),
-primary key(id_pedido)
-);
+CREATE TABLE pedidos(
+id_pedido INT NOT NULL auto_increment,
+id_cliente INT NOT NULL, 
+data_pedido DATE, 
+status VARCHAR(20),
+PRIMARY KEY(id_pedido)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-create table itens_pedido(
-id_item int not null,
-id_pedido int not null,
-id_produto int not null,
-quantidade int,
-preco_unitario decimal,
-primary key(id_item)
-);
+CREATE TABLE itens_pedido(
+id_item INT NOT NULL,
+id_pedido INT NOT NULL,
+id_produto INT NOT NULL,
+quantidade INT,
+preco_unitario DECIMAL(10,2),
+PRIMARY KEY(id_item)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-create table pagamentos(
-id_pagamento int,
-id_pedido int not null,
-forma_pagamento varchar(40),
-status_pagamento varchar(20),
-primary key(id_pagamento)
-);
+CREATE TABLE pagamentos(
+id_pagamento INT NOT NULL AUTO_INCREMENT,
+id_pedido INT NOT NULL,
+forma_pagamento VARCHAR(40),
+status_pagamento VARCHAR(20),
+PRIMARY KEY(id_pagamento)
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- adicionando chaves estrangeiras
-alter table produtos
-add foreign key (id_categoria)
-references categorias(id_categoria);
+ALTER TABLE produtos
+ADD CONSTRAINT fk_produtos_categoria
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
 
-alter table pedidos
-add foreign key(id_cliente)
-references clientes(id_cliente);
 
-alter table itens_pedido
-add foreign key (id_pedido)
-references pedidos(id_pedido),
-add foreign key (id_produto)
-references produtos(id_produto);
+ALTER TABLE pedidos
+ADD CONSTRAINT fk_pedidos_cliente
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
 
-alter table pagamentos
-add foreign key (id_pedido)
-references pedidos(id_pedido);
+ALTER TABLE itens_pedido
+ADD CONSTRAINT fk_itens_pedido_pedido
+    FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+ADD CONSTRAINT fk_itens_pedido_produto
+    FOREIGN KEY (id_produto) REFERENCES produtos(id_produto)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+REFERENCES produtos(id_produto);
+
+ALTER TABLE pagamentos
+ADD CONSTRAINT fk_pagamentos_pedido
+    FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+ADD CONSTRAINT uq_pagamentos_pedido
+    UNIQUE (id_pedido);
