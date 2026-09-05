@@ -48,3 +48,22 @@ forma_pagamento varchar(40),
 status_pagamento varchar(20),
 primary key(id_pagamento)
 );
+
+-- adicionando chaves estrangeiras
+alter table produtos
+add foreign key (id_categoria)
+references categorias(id_categoria);
+
+alter table pedidos
+add foreign key(id_cliente)
+references clientes(id_cliente);
+
+alter table itens_pedido
+add foreign key (id_pedido)
+references pedidos(id_pedido),
+add foreign key (id_produto)
+references produtos(id_produto);
+
+alter table pagamentos
+add foreign key (id_pedido)
+references pedidos(id_pedido);
