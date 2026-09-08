@@ -20,3 +20,26 @@ from(
   where p.status <> 'Cancelado'
   group by c.id_cliente, c.nome
 ) as gastos_por_cliente;
+
+-- 18. quais cidades possuem maior quantidade de pedidos?
+select c.cidade, count(p.id_pedido) as total_pedidos
+from pedidos as p inner join clientes as c
+on c.id_cliente = p.id_cliente 
+group by c.cidade
+order by total_pedidos desc;
+
+
+-- 19. quais clientes realizaram mais pedidos?
+select c.id_cliente, c.nome, count(id_pedido) as quantidade_pedidos 
+from pedidos as p
+join clientes as c 
+on p.id_cliente = c.id_cliente
+group by c.id_cliente, c.nome
+order by quantidade_pedidos desc 
+limit 5;
+
+-- 20. quantos clientes nunca realizaram um pedido?
+select count(null) as clientes_sem_pedidos 
+from clientes as c 
+left join pedidos as p 
+on p.id_cliente = c.id_cliente;
