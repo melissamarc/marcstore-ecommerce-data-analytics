@@ -33,16 +33,6 @@ Este projeto tem como objetivo atuar como Analista de Dados Júnior na MarcStore
 ### Diagrama de Entidade e Relacionamento (DER)
 ![der](modelo_relacional/der.png)
 
-
-
-## 💡 Principais insights
-
-> Liste em bullets os achados mais relevantes de toda a análise, de forma resumida e direta.
-
-- [Insight 1]
-- [Insight 2]
-- [Insight 3]
-
 ## 🛠️ Tecnologias utilizadas
 
 - **SQL** — modelagem, criação e consultas ao banco de dados
