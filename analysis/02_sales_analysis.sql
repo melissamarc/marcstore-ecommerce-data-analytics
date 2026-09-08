@@ -17,10 +17,18 @@ order by month(p.data_pedido);
 -- mes 8, 1.022.484,76
 -- mes 9, 1.156.629,13
 -- mes 10, 1.054.561,86
--- mes 11 ,911.004,54
+-- mes 11, 911.004,54
 -- mes 12, 637.623,76
 
--- 07. qual mes teve o maior faturamento?
+-- 07. qual foi o mês com maior faturamento?
+select month(p.data_pedido), sum(i.quantidade * i.preco_unitario) as total_pedido
+from pedidos as p join itens_pedido as i
+on i.id_pedido = p.id_pedido 
+where p.status <> 'Cancelado'
+group by month(p.data_pedido)
+order by total_pedido desc;
+
+-- com base nos resultados da consulta anterior, o mês com maior faturamento foi o mês 9, com um total de 1.156.629,13.
 
 
 
